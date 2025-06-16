@@ -1,0 +1,12 @@
+<div class="container">
+  <h2 class="mb-4">Exportieren</h2>
+
+  <div class="mb-3">
+    <button class="btn btn-outline-success me-2" (click)="exportCSV()">Als CSV exportieren</button>
+    <button class="btn btn-outline-info" (click)="exportJSON()">Als JSON exportieren</button>
+  </div>
+
+  <div class="alert alert-light mt-4" *ngIf="lastExport">
+    Letzter Export: {{ lastExport | date:'short' }}
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="container">
+  <h2 class="mb-4">Datei-Upload</h2>
+
+  <div class="mb-3">
+    <label for="sdatFile" class="form-label">SDAT Datei auswählen</label>
+    <input class="form-control" type="file" id="sdatFile" (change)="onSdatSelected($event)">
+  </div>
+
+  <div class="mb-3">
+    <label for="eslFile" class="form-label">ESL Datei auswählen</label>
+    <input class="form-control" type="file" id="eslFile" (change)="onEslSelected($event)">
+  </div>
+
+  <button class="btn btn-primary" (click)="uploadFiles()">Hochladen</button>
+</div>
