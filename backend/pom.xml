@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- 1) Point at the parent POM -->
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>Electronic-Analytics</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>backend</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <java.version>17</java.version>
+        <!-- align Spring Boot to a stable 3.x line -->
+        <spring-boot.version>3.1.7</spring-boot.version>
+    </properties>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
