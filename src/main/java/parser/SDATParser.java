@@ -23,7 +23,6 @@ public class SDATParser {
             factory.setNamespaceAware(true);
             Document doc = factory.newDocumentBuilder().parse(file);
 
-
             doc.getDocumentElement().normalize();
 
             String meterId = file.getName().split("_")[0];
@@ -55,7 +54,7 @@ public class SDATParser {
                 Instant timestamp = startTime.plus(Duration.ofMinutes((sequence - 1) * intervalMinutes));
                 String timestampStr = DateTimeFormatter.ISO_INSTANT.format(timestamp);
 
-                list.add(new Messwert(meterId, "sdat", timestampStr, value, "", file.getName()));
+                list.add(new Messwert(timestampStr, value, "sdat", meterId, file.getName()));
             }
 
         } catch (Exception e) {

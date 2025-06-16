@@ -1,4 +1,3 @@
-// Erweiterter Main-Code mit sdat/ESL-Verknüpfung, Export & HTTP-POST
 import model.Messwert;
 import parser.ESLParser;
 import parser.SDATParser;
@@ -7,142 +6,120 @@ import util.CSVExporter;
 import util.JSONExporter;
 
 import java.io.File;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Starte Verarbeitung aller XML-Dateien im 'data'-Ordner...");
+        System.out.println("Starte Verarbeitung aller XML-Dateien...");
 
-        String folderPath = "C:\\Users\\andri\\OneDrive - Bildungszentrum Zürichsee\\School&Work\\BZZ\\Module\\M306\\_M306_Electronic_Analytics\\Data\\SDAT-Files";
+        String sdatFolder = "C:\\Users\\andri\\OneDrive - Bildungszentrum Zürichsee\\School&Work\\BZZ\\Module\\M306\\_M306_Electronic_Analytics\\Data\\SDAT-Files";
+        String eslFolder = "C:\\Users\\andri\\OneDrive - Bildungszentrum Zürichsee\\School&Work\\BZZ\\Module\\M306\\_M306_Electronic_Analytics\\Data\\ESL-Files";
         String exportPath = "C:\\Users\\andri\\OneDrive - Bildungszentrum Zürichsee\\School&Work\\BZZ\\Module\\M306\\_M306_Electronic_Analytics\\Data\\export";
         new File(exportPath).mkdirs();
 
-        Map<String, Messwert> messwertMap = new TreeMap<>();
-        Map<String, List<Messwert>> sensorMap = new HashMap<>();
+        Map<String, Double> eslBezugMap = new TreeMap<>();
+        Map<String, Double> eslEinspeisungMap = new TreeMap<>();
 
-        List<File> files = FileLoader.getFilesFromDirectory(folderPath, ".xml");
-
-        if (files.isEmpty()) {
-            System.out.println("Keine XML-Dateien im Verzeichnis gefunden: " + folderPath);
-            return;
-        }
-
-        for (File file : files) {
-            System.out.println("Verarbeite Datei: " + file.getName());
-
-            List<Messwert> messwerte;
-            if (isSDAT(file)) {
-                messwerte = SDATParser.parseSDAT(file);
-            } else {
-                messwerte = ESLParser.parseESL(file);
-            }
-
+        List<File> eslFiles = FileLoader.getFilesFromDirectory(eslFolder, ".xml");
+        for (File file : eslFiles) {
+            System.out.println("Verarbeite ESL-Datei: " + file.getName());
+            List<Messwert> messwerte = ESLParser.parseESL(file);
             String fallbackTimestamp = extractMonthFromFilename(file.getName());
 
             for (Messwert m : messwerte) {
                 if (m.getTimestamp() == null || m.getTimestamp().isBlank()) {
                     m.setTimestamp(fallbackTimestamp);
                 }
-                String key = m.getKey();
-                messwertMap.put(key, m);
-                sensorMap.computeIfAbsent(m.getId(), k -> new ArrayList<>()).add(m);
+                String monat = m.getTimestamp();
+                if (monat == null || monat.isBlank()) {
+                    System.err.println("[Warnung] ESL ohne Timestamp: " + m);
+                    continue;
+                }
+                if (m.getObis().equals("1-1:1.8.2")) {
+                    eslBezugMap.put(monat, m.getValue());
+                } else if (m.getObis().equals("1-1:2.8.2")) {
+                    eslEinspeisungMap.put(monat, m.getValue());
+                }
             }
         }
 
-        if (messwertMap.isEmpty()) {
-            System.out.println("Keine gültigen Messwerte extrahiert.");
-            return;
-        }
-
-        List<Messwert> sortedList = new ArrayList<>(messwertMap.values());
-        sortedList.sort(Comparator.comparing(Messwert::getTimestamp));
-
-        Map<String, Double> bezugMap = new TreeMap<>();
-        Map<String, Double> einspeisungMap = new TreeMap<>();
-        Map<String, Double> netzMap = new TreeMap<>();
-
-        double bezugSumme = 0;
-        double einspeisungSumme = 0;
-
-        for (Messwert m : sortedList) {
-            String ts = m.getTimestamp();
-            if (ts == null || ts.isBlank()) continue;
-
-            boolean isBezug = m.getObis().equals("sdat") && m.getId().contains("742") || m.getObis().startsWith("1-1:1.8");
-            boolean isEinspeisung = m.getObis().equals("sdat") && m.getId().contains("735") || m.getObis().startsWith("1-1:2.8");
-
-            if (isBezug) {
-                bezugSumme += m.getValue();
-                bezugMap.merge(ts, m.getValue(), Double::sum);
-                m.setAbsoluteValue(bezugSumme);
-            } else if (isEinspeisung) {
-                einspeisungSumme += m.getValue();
-                einspeisungMap.merge(ts, m.getValue(), Double::sum);
-                m.setAbsoluteValue(einspeisungSumme);
+        Map<String, List<Messwert>> sdatMap = new TreeMap<>();
+        List<File> sdatFiles = FileLoader.getFilesFromDirectory(sdatFolder, ".xml");
+        for (File file : sdatFiles) {
+            System.out.println("Verarbeite SDAT-Datei: " + file.getName());
+            List<Messwert> messwerte = SDATParser.parseSDAT(file);
+            for (Messwert m : messwerte) {
+                String monat = extractMonthFromTimestamp(m.getTimestamp());
+                if (monat == null || monat.equals("unknown")) {
+                    System.err.println("[Warnung] SDAT mit ungültigem Timestamp: " + m.getTimestamp() + " → " + file.getName());
+                    continue;
+                }
+                sdatMap.computeIfAbsent(monat, k -> new ArrayList<>()).add(m);
             }
         }
 
-        for (String ts : bezugMap.keySet()) {
-            double b = bezugMap.getOrDefault(ts, 0.0);
-            double e = einspeisungMap.getOrDefault(ts, 0.0);
-            netzMap.put(ts, b - e);
+        System.out.println("\n--- Energiefluss über Zeit (kombiniert) ---");
+        System.out.println("Monat\t\tBezug\tEinspeisung\tNetto");
+
+        List<Messwert> exportList = new ArrayList<>();
+
+        Set<String> alleMonate = new TreeSet<>();
+        alleMonate.addAll(eslBezugMap.keySet());
+        alleMonate.addAll(sdatMap.keySet());
+
+        for (String monat : alleMonate) {
+            double eslBezug = eslBezugMap.getOrDefault(monat, 0.0);
+            double eslEinspeisung = eslEinspeisungMap.getOrDefault(monat, 0.0);
+
+            List<Messwert> sdatWerte = sdatMap.getOrDefault(monat, Collections.emptyList());
+            double sdatBezugSum = sdatWerte.stream()
+                    .filter(m -> m.getObis().equals("sdat") && m.getId().contains("742"))
+                    .mapToDouble(Messwert::getValue).sum();
+
+            double sdatEinspeisungSum = sdatWerte.stream()
+                    .filter(m -> m.getObis().equals("sdat") && m.getId().contains("735"))
+                    .mapToDouble(Messwert::getValue).sum();
+
+            double neuerBezug = eslBezug + sdatBezugSum;
+            double neueEinspeisung = eslEinspeisung + sdatEinspeisungSum;
+            double netto = neuerBezug - neueEinspeisung;
+
+            System.out.printf("%s\t%.2f\t%.2f\t%.2f\n", monat, neuerBezug, neueEinspeisung, netto);
+
+            exportList.add(new Messwert(monat, neuerBezug, "Bezug", "combined", monat));
+            exportList.add(new Messwert(monat, neueEinspeisung, "Einspeisung", "combined", monat));
+            exportList.add(new Messwert(monat, netto, "Netto", "combined", monat));
         }
 
-        // Ausgabe
-        System.out.println("\n--- Energiefluss über Zeit ---");
-        System.out.println("Zeitpunkt\t\tBezug\tEinspeisung\tNetto");
-        for (String ts : netzMap.keySet()) {
-            double b = bezugMap.getOrDefault(ts, 0.0);
-            double e = einspeisungMap.getOrDefault(ts, 0.0);
-            double n = netzMap.get(ts);
-            System.out.printf("%s\t%.2f\t%.2f\t%.2f\n", ts, b, e, n);
-        }
-
-        // JSON-Ausgabe
-        System.out.println("\n--- JSON Output ---");
-        System.out.println("[");
-        Iterator<String> it = netzMap.keySet().iterator();
-        while (it.hasNext()) {
-            String ts = it.next();
-            double b = bezugMap.getOrDefault(ts, 0.0);
-            double e = einspeisungMap.getOrDefault(ts, 0.0);
-            double n = netzMap.get(ts);
-            System.out.printf("  {\"timestamp\": \"%s\", \"input\": %.2f, \"output\": %.2f, \"net\": %.2f}%s\n",
-                    ts, b, e, n, it.hasNext() ? "," : "");
-        }
-        System.out.println("]");
-
-        // Exporte
-        CSVExporter.export(sortedList, new File(exportPath + "/messwerte.csv"));
-        JSONExporter.export(sortedList, new File(exportPath + "/messwerte.json"));
+        CSVExporter.export(exportList, new File(exportPath + "/combined_messwerte.csv"));
+        JSONExporter.export(exportList, new File(exportPath + "/combined_messwerte.json"));
 
         System.out.println("\n✅ CSV- und JSON-Dateien erfolgreich erstellt im Ordner: " + exportPath);
     }
 
-    private static String extractMonthFromFilename(String filename) {
+    private static String extractMonthFromTimestamp(String timestamp) {
         try {
-            String datePart = filename.split("_")[1];
-            LocalDate date = LocalDate.parse(datePart, DateTimeFormatter.ofPattern("yyyyMMdd"));
-            return date.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            if (timestamp == null || timestamp.length() < 7) return "unknown";
+            if (timestamp.length() >= 10) {
+                LocalDate date = LocalDate.parse(timestamp.substring(0, 10));
+                return date.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            } else {
+                // fallback für z.B. "2019-03"
+                return timestamp.substring(0, 7);
+            }
         } catch (Exception e) {
             return "unknown";
         }
     }
-
-    private static boolean isSDAT(File file) {
+    private static String extractMonthFromFilename(String filename) {
         try {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
-            doc.getDocumentElement().normalize();
-            String rootName = doc.getDocumentElement().getNodeName();
-            return rootName.contains("ValidatedMeteredData");
+            String[] parts = filename.split("_");
+            String datePart = parts[1]; // z. B. "20190131"
+            return datePart.substring(0, 4) + "-" + datePart.substring(4, 6); // "2019-01"
         } catch (Exception e) {
-            return false;
+            return "unknown";
         }
     }
 

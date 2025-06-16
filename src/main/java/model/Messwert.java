@@ -1,50 +1,67 @@
 package model;
 
 public class Messwert {
-    private String id;
-    private String obis;
     private String timestamp;
     private double value;
-    private String status;
+    private String obis;
+    private String id;
     private String source;
-
     private double absoluteValue;
 
-    public Messwert(String id, String obis, String timestamp, double value, String status, String source) {
-        this.id = id;
-        this.obis = obis;
+
+
+    // Konstruktor für kombinierten Export (Bezug/Einspeisung/Netto)
+    public Messwert(String timestamp, double value, String obis, String id, String source, double absoluteValue) {
         this.timestamp = timestamp;
         this.value = value;
-        this.status = status;
+        this.obis = obis;
+        this.id = id;
         this.source = source;
-        this.absoluteValue = 0; // default
+        this.absoluteValue = absoluteValue;
     }
 
-    public String getKey() {
-        return id + "-" + obis + "-" + (timestamp != null ? timestamp : "no-time");
+    public Messwert(String timestamp, double value, String obis, String id, String source) {
+        this(timestamp, value, obis, id, source, 0.0);
     }
 
-    public String getId() {
-        return id;
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
 
     public String getObis() {
         return obis;
     }
 
-    public String getTimestamp() { return timestamp; }
-    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
-
-    public double getValue() {
-        return value;
+    public void setObis(String obis) {
+        this.obis = obis;
     }
 
-    public String getStatus() {
-        return status;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSource() {
         return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public double getAbsoluteValue() {
@@ -55,11 +72,7 @@ public class Messwert {
         this.absoluteValue = absoluteValue;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s\t%s\t%.4f\t%s\tAbs: %.4f\t%s\t%s",
-                id, obis, value,
-                timestamp != null ? timestamp : "-",
-                absoluteValue, status, source);
+    public String getKey() {
+        return timestamp + "_" + obis + "_" + id;
     }
 }

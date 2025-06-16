@@ -8,19 +8,18 @@ import java.io.IOException;
 import java.util.List;
 
 public class CSVExporter {
-    public static void export(List<Messwert> list, File target) {
-        try (FileWriter fw = new FileWriter(target)) {
-            fw.write("timestamp,value,obis,id,source\n");
-            for (Messwert m : list) {
-                fw.write(String.format("%s,%.4f,%s,%s,%s\n",
+    public static void export(List<Messwert> messwerte, File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("timestamp,value,obis,id,source\n");
+            for (Messwert m : messwerte) {
+                writer.write(String.format("%s,%.4f,%s,%s,%s\n",
                         m.getTimestamp(),
-                        m.getAbsoluteValue(),
+                        m.getValue(),
                         m.getObis(),
                         m.getId(),
-                        m.getSource()
-                ));
+                        m.getSource()));
             }
-            System.out.println("CSV-Export erfolgreich: " + target.getAbsolutePath());
+            System.out.println("CSV-Export erfolgreich: " + file.getAbsolutePath());
         } catch (IOException e) {
             System.err.println("Fehler beim CSV-Export: " + e.getMessage());
         }

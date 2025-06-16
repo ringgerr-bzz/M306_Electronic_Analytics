@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileLoader {
-    public static List<File> getFilesFromDirectory(String path, String endsWith) {
-        File folder = new File(path);
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(endsWith));
-        List<File> result = new ArrayList<>();
-        if (files != null) {
-            for (File f : files) result.add(f);
+    public static List<File> getFilesFromDirectory(String folderPath, String extension) {
+        List<File> fileList = new ArrayList<>();
+        File folder = new File(folderPath);
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(extension));
+            if (files != null) {
+                for (File file : files) {
+                    fileList.add(file);
+                }
+            }
         }
-        return result;
+        return fileList;
     }
 }
