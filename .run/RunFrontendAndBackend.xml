@@ -1,0 +1,36 @@
+<component name="ProjectRunConfigurationManager">
+
+    <!-- 1) Frontend starten (npm start im frontend-Ordner) -->
+    <configuration default="false" name="Frontend" type="npm" factoryName="npm">
+        <option name="packageJsonPath" value="$PROJECT_DIR$/frontend/package.json" />
+        <!-- 'start' führt npm install + ng serve aus -->
+        <option name="command" value="start" />
+    </configuration>
+
+    <!-- 2) Backend starten (Spring Boot run) -->
+    <configuration default="false"
+                   type="SpringBootRunConfigurationType"
+                   factoryName="Spring Boot"
+                   name="Backend">
+        <!-- Modulname muss dem IDEA-Modulnamen entsprechen -->
+        <option name="moduleName" value="backend" />
+        <!-- Main-Klasse falls IDEA sie nicht automatisch findet -->
+        <option name="mainClass" value="org.example.Application" />
+    </configuration>
+
+    <!-- 3) Compound config, die beide oben zusammenfasst -->
+    <configuration default="false"
+                   type="CompoundRunConfiguration"
+                   factoryName="Compound"
+                   name="Run All">
+        <extensions>
+            <option name="includeConfigurations">
+                <list>
+                    <option value="Frontend" />
+                    <option value="Backend" />
+                </list>
+            </option>
+        </extensions>
+    </configuration>
+
+</component>

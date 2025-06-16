@@ -1,38 +1,61 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# ------------------------------
+# IDE & Editor
+# ------------------------------
+.idea/
 *.iml
 *.ipr
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+*.iws
 .vscode/
 
-### Mac OS ###
+# ------------------------------
+# OS files
+# ------------------------------
 .DS_Store
+Thumbs.db
+
+# ------------------------------
+# Logs
+# ------------------------------
+*.log
+
+# ------------------------------
+# Maven / Java
+# ------------------------------
+/backend/target/
+/backend/*.log
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+.settings/
+
+# If you add the Maven Wrapper:
+.mvn/wrapper/maven-wrapper.jar
+
+# ------------------------------
+# Node / Angular
+# ------------------------------
+/frontend/node_modules/
+/frontend/dist/
+/frontend/*.log
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/package-lock.json
+/frontend/yarn.lock
+
+# Angular CLI build outputs
+/frontend/.angular/
+
+# ------------------------------
+# Misc
+# ------------------------------
+# coverage reports
+coverage/
+# environment files (if you ever store secrets there)
+/frontend/src/environments/*.ts
+
+# Temporary files
+tmp/
+temp/
+*.tmp
