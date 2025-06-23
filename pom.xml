@@ -4,7 +4,16 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.example</groupId>
+
+    <!-- 1. Inherit from Spring Boot’s starter-parent -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.7</version>
+        <relativePath/>  <!-- do NOT look for another POM above -->
+    </parent>
+
+    <groupId>org.m306</groupId>
     <artifactId>Electronic-Analytics</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>

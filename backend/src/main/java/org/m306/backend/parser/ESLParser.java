@@ -1,6 +1,6 @@
-package parser;
+package org.m306.backend.parser;
 
-import model.Messwert;
+import org.m306.backend.model.Messwert;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.File;
@@ -22,12 +22,12 @@ public class ESLParser {
                 Element row = (Element) rows.item(i);
                 String obis = row.getAttribute("obis");
                 String timestamp = row.getAttribute("valueTimeStamp"); // optional
-                String status = row.getAttribute("status");
                 double value = Double.parseDouble(row.getAttribute("value"));
-                list.add(new Messwert(meterId, obis, timestamp, value, status, file.getName()));
+                list.add(new Messwert(timestamp, value, obis, meterId, file.getName()));
             }
         } catch (Exception e) {
             System.err.println("Fehler beim Parsen der ESL-Datei: " + file.getName());
+            e.printStackTrace();
         }
         return list;
     }

@@ -3,28 +3,55 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- 1) Point at the parent POM -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 2. Inherit *your* root aggregator (which already is a Spring-Boot parent) -->
     <parent>
-        <groupId>org.example</groupId>
-        <artifactId>Electronic-Analytics</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.7</version>
+        <relativePath/>   <!-- do not resolve any other POM -->
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>backend</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
-        <!-- align Spring Boot to a stable 3.x line -->
-        <spring-boot.version>3.1.7</spring-boot.version>
     </properties>
 
     <dependencies>
+        <!-- pulls in spring-boot-starter + spring-boot-autoconfigure + spring-web + Tomcat, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>3.1.7</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <plugins>
+            <!-- spring-boot’s Maven plugin (version inherited) -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- ensure Java 17 compilation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

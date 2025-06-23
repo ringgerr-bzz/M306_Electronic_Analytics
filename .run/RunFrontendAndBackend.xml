@@ -14,7 +14,7 @@
                    name="Backend">
         <!-- Modulname muss dem IDEA-Modulnamen entsprechen -->
         <option name="moduleName" value="backend" />
-        <!-- Main-Klasse falls IDEA sie nicht automatisch findet -->
+        <!-- org.m306.backend.Main-Klasse falls IDEA sie nicht automatisch findet -->
         <option name="mainClass" value="org.example.Application" />
     </configuration>
 
