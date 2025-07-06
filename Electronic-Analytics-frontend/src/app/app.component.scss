@@ -1,0 +1,110 @@
+$app-gradient-start: #6a11cb;
+$app-gradient-end:   #2575fc;
+$app-bg:             #f2f2f7;
+$app-surface:        #ffffff;
+$app-text:           #1c1c1e;
+$app-shadow:         rgba(0, 0, 0, 0.1);
+
+:host {
+  display: block;
+  background: $app-bg;
+  color: $app-text;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  height: 100vh;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, $app-gradient-start, $app-gradient-end);
+  color: white;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px $app-shadow;
+
+  .title {
+    font-size: 1.25rem;
+    margin-left: 0.5rem;
+  }
+  .spacer { flex: 1 1 auto; }
+}
+
+.sidenav-container { height: calc(100vh - 64px); }
+.sidenav {
+  width: 260px;
+  background: $app-surface;
+  padding-top: 1rem;
+
+  .logo-container {
+    text-align: center;
+    margin-bottom: 1rem;
+    img { width: 120px; height: auto; }
+  }
+  mat-list-item {
+    margin: 0.25rem 0;
+    border-radius: 8px;
+    &:hover { background: rgba($app-gradient-end, 0.1); }
+  }
+}
+
+.hero {
+  background: linear-gradient(135deg, $app-gradient-end, $app-gradient-start);
+  color: white;
+  text-align: center;
+  padding: 4rem 1rem;
+  border-radius: 0 0 16px 16px;
+  margin-bottom: 2rem;
+
+  h1 { font-size: 2.5rem; margin-bottom: 1rem; font-weight: 300; }
+  p  { font-size: 1.125rem; margin-bottom: 2rem; }
+  button { font-size: 1rem; padding: 0.75rem 2rem; }
+}
+
+.overview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+
+  .card {
+    flex: 1 1 260px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px $app-shadow;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    mat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      mat-icon { font-size: 2rem; color: $app-gradient-end; }
+      mat-card-title { font-size: 1.125rem; font-weight: 500; }
+    }
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px $app-shadow;
+    }
+  }
+}
+
+.section {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+
+  .card {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px $app-shadow;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px $app-shadow;
+    }
+  }
+}
+
+html { scroll-behavior: smooth; }

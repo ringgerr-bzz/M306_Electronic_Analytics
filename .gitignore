@@ -1,0 +1,10 @@
+# Backend
+backend/target/
+backend/.mvn/
+backend/.gradle/
+backend/*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/

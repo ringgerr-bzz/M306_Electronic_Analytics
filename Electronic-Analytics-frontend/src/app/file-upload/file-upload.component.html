@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-title>Daten hochladen</mat-card-title>
+  <mat-card-content class="upload-fields">
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="sdatInputRef.click()">
+      <mat-icon>upload_file</mat-icon>
+      {{ selectedSdat?.name || 'SDAT-Datei wählen' }}
+    </button>
+    <input
+      #sdatInputRef
+      type="file"
+      accept=".xml"
+      hidden
+      (change)="onSdatPicked($event)" />
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="eslInputRef.click()">
+      <mat-icon>upload_file</mat-icon>
+      {{ selectedEsl?.name || 'ESL-Datei wählen' }}
+    </button>
+    <input
+      #eslInputRef
+      type="file"
+      accept=".xml"
+      hidden
+      (change)="onEslPicked($event)" />
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="upload()"
+      [disabled]="loading">
+      <mat-icon>cloud_upload</mat-icon>
+      {{ loading ? 'Lädt…' : 'Upload & Visualisieren' }}
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,39 @@
+/* System-Font und Apple Light Background */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #F2F2F7;
+  color: #1C1C1E;
+}
+
+/* Toolbar und Segmented Control Overrides */
+.mat-toolbar {
+  background: #FFFFFF;
+  color: #1C1C1E;
+  box-shadow: none;
+  border-bottom: 1px solid #C7C7CC;
+}
+.segment-toggle {
+  background: #E5E5EA;
+  border-radius: 8px;
+  padding: 4px;
+}
+.segment-toggle .mat-button-toggle-checked {
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Card Styling */
+mat-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Canvas Größe */
+canvas {
+  display: block;
+  width: 100% !important;
+  height: 300px !important;
+  margin-top: 16px;
+}

@@ -1,0 +1,100 @@
+<!-- src/app/app.component.html -->
+
+<mat-toolbar class="app-toolbar">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="title">Electronic Analytics</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="exportCsv()" matTooltip="Export CSV">
+    <mat-icon>download</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" class="sidenav">
+    <mat-nav-list>
+      <mat-list-item (click)="scrollTo('hero')">
+        <mat-icon matListIcon>home</mat-icon>
+        <span>Home</span>
+      </mat-list-item>
+      <mat-list-item (click)="scrollTo('upload')">
+        <mat-icon matListIcon>cloud_upload</mat-icon>
+        <span>Upload</span>
+      </mat-list-item>
+      <mat-list-item (click)="scrollTo('overview')">
+        <mat-icon matListIcon>dashboard</mat-icon>
+        <span>Übersicht</span>
+      </mat-list-item>
+      <mat-list-item (click)="scrollTo('relative')">
+        <mat-icon matListIcon>timeline</mat-icon>
+        <span>Relativ</span>
+      </mat-list-item>
+      <mat-list-item (click)="scrollTo('reading')">
+        <mat-icon matListIcon>bolt</mat-icon>
+        <span>Zählerstände</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content [@fadeInStagger]>
+
+    <!-- Hero-Sektion mit Text & Button -->
+    <section id="hero" class="hero">
+      <h1>Live-Monitoring Deiner Energie</h1>
+      <p>Erhalte in Echtzeit Einblicke in Deinen Verbrauch und Deine Einspeisung – modern & intuitiv.</p>
+      <button mat-raised-button color="accent" (click)="scrollTo('upload')">
+        Jetzt Daten hochladen
+      </button>
+    </section>
+
+    <!-- Übersicht -->
+    <section id="overview" class="section overview">
+      <mat-card class="card">
+        <mat-card-header>
+          <mat-icon>devices</mat-icon>
+          <mat-card-title>Sensoren</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          {{ sensorData.length }} aktive Sensoren
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="card">
+        <mat-card-header>
+          <mat-icon>today</mat-icon>
+          <mat-card-title>Messungen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          {{ totalPoints }} Punkte
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="card">
+        <mat-card-header>
+          <mat-icon>insights</mat-icon>
+          <mat-card-title>Letzte 24h</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          {{ last24hPoints }} Punkte
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <!-- Upload-Section -->
+    <section id="upload" class="section">
+      <app-file-upload
+        class="card"
+        (dataLoaded)="onDataLoaded($event)">
+      </app-file-upload>
+    </section>
+
+
+    <section id="relative" class="section">
+      <app-relative-chart class="card" [data]="sensorData"></app-relative-chart>
+    </section>
+
+    <section id="reading" class="section">
+      <app-meter-reading-chart class="card" [data]="sensorData"></app-meter-reading-chart>
+    </section>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
