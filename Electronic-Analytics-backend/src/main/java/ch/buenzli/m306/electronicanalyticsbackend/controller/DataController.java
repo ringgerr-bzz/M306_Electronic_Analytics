@@ -24,13 +24,13 @@ public class DataController {
     }
 
     @PostMapping(
-            value    = "/upload",
+            value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public List<SensorData> upload(
             @RequestParam(value = "sdat", required = false) MultipartFile sdat,
-            @RequestParam(value = "esl",  required = false) MultipartFile esl
+            @RequestParam(value = "esl", required = false) MultipartFile esl
     ) throws Exception {
 
         if (sdat == null && esl == null) {
@@ -47,7 +47,6 @@ public class DataController {
             esl.transferTo(tmpE);
         }
 
-        // Hier wird immer beides zusammengeführt – auch wenn nur eine der Dateien existiert
         return service.updateData(tmpS, tmpE);
     }
 

@@ -18,24 +18,31 @@ public class Messwert {
     public String getSensorId() {
         return sensorId;
     }
+
     public void setSensorId(String sensorId) {
         this.sensorId = sensorId;
     }
+
     public Instant getTimestamp() {
         return timestamp;
     }
+
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
+
     public double getRelativeValue() {
         return relativeValue;
     }
+
     public void setRelativeValue(double relativeValue) {
         this.relativeValue = relativeValue;
     }
+
     public double getAbsoluteValue() {
         return absoluteValue;
     }
+
     public void setAbsoluteValue(double absoluteValue) {
         this.absoluteValue = absoluteValue;
     }

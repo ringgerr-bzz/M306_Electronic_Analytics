@@ -9,7 +9,11 @@ public enum ObisCode {
 
     private final String code;
     private final String sensorId;
-    ObisCode(String code, String sensorId){ this.code=code; this.sensorId=sensorId; }
+
+    ObisCode(String code, String sensorId) {
+        this.code = code;
+        this.sensorId = sensorId;
+    }
 
 
     public String getCode() {

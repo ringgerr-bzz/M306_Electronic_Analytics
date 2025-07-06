@@ -16,20 +16,16 @@ import java.util.*;
 
 public class EslParser {
 
-    /**
-     * Parst ein ESL-XML und liefert pro SensorId eine Liste von Messwert-Snapshots
-     * (einen pro gefundenem TimePeriod-Block).
-     */
-    public Map<String,List<Messwert>> parse(File xml) throws Exception {
+
+    public Map<String, List<Messwert>> parse(File xml) throws Exception {
         SAXBuilder builder = new SAXBuilder();
-        Document doc       = builder.build(xml);
-        Element root       = doc.getRootElement();
-        Element meter      = root.getChild("Meter");
+        Document doc = builder.build(xml);
+        Element root = doc.getRootElement();
+        Element meter = root.getChild("Meter");
         if (meter == null) throw new IllegalArgumentException("ESL-XML ohne <Meter>");
 
-        Map<String,List<Messwert>> readings = new HashMap<>();
+        Map<String, List<Messwert>> readings = new HashMap<>();
 
-        // Für jeden TimePeriod-Block
         for (Element tp : meter.getChildren("TimePeriod")) {
             String endAttr = tp.getAttributeValue("end");
             Instant ts;
@@ -44,14 +40,12 @@ public class EslParser {
                 ts = Instant.now();
             }
 
-            // Jede ValueRow pro Block
             for (Element vr : tp.getChildren("ValueRow")) {
-                String obis   = vr.getAttributeValue("obis");
+                String obis = vr.getAttributeValue("obis");
                 String valStr = vr.getAttributeValue("value");
                 if (obis == null || valStr == null) continue;
                 double absVal = Double.parseDouble(valStr);
 
-                // Nur bekannte OBIS-Codes
                 Optional<ObisCode> code = Arrays.stream(ObisCode.values())
                         .filter(o -> o.getCode().equals(obis))
                         .findFirst();

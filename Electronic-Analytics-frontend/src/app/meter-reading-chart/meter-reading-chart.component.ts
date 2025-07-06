@@ -1,15 +1,15 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import {Component, Input, OnChanges} from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexYAxis,
   ApexDataLabels,
   ApexStroke,
-  ApexTooltip
+  ApexTooltip,
+  ApexXAxis,
+  ApexYAxis,
+  NgApexchartsModule
 } from 'ng-apexcharts';
-import { MatCardModule } from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 
 export type MeterReadingChartOptions = {
   series: ApexAxisChartSeries;
@@ -46,18 +46,18 @@ export class MeterReadingChartComponent implements OnChanges {
 
   public opts: MeterReadingChartOptions = {
     series: [],
-    chart: { type: 'line', height: 300, animations: { enabled: true } },
-    xaxis: { type: 'datetime', labels: { datetimeUTC: false, format: 'dd MMM' } },
+    chart: {type: 'line', height: 300, animations: {enabled: true}},
+    xaxis: {type: 'datetime', labels: {datetimeUTC: false, format: 'dd MMM'}},
     yaxis: {
       min: 0,
       decimalsInFloat: 1,
-      labels: { formatter: (v) => v.toFixed(1) }
+      labels: {formatter: (v) => v.toFixed(1)}
     },
-    dataLabels: { enabled: false },
-    stroke: { curve: 'smooth' },
+    dataLabels: {enabled: false},
+    stroke: {curve: 'smooth'},
     tooltip: {
-      x: { format: 'dd MMM HH:mm' },
-      y: { formatter: (v) => `${v.toFixed(1)} kWh` }
+      x: {format: 'dd MMM HH:mm'},
+      y: {formatter: (v) => `${v.toFixed(1)} kWh`}
     }
   };
 
@@ -66,7 +66,6 @@ export class MeterReadingChartComponent implements OnChanges {
     const raw742 = map.get('ID742') || [];
     const raw735 = map.get('ID735') || [];
 
-    // Alle Zeitstempel
     const xs = Array.from(new Set([
       ...raw742.map(m => m.timestamp),
       ...raw735.map(m => m.timestamp)
@@ -74,21 +73,20 @@ export class MeterReadingChartComponent implements OnChanges {
       .map(t => new Date(t).getTime())
       .sort((a, b) => a - b);
 
-    // Serie für ID742 & ID735
     const s742 = xs.map(x => {
       const m = raw742.find(r => new Date(r.timestamp).getTime() === x);
-      return { x, y: m ? m.absoluteValue : null };
+      return {x, y: m ? m.absoluteValue : null};
     });
     const s735 = xs.map(x => {
       const m = raw735.find(r => new Date(r.timestamp).getTime() === x);
-      return { x, y: m ? m.absoluteValue : null };
+      return {x, y: m ? m.absoluteValue : null};
     });
 
     this.opts = {
       ...this.opts,
       series: [
-        { name: 'Bezug Zählerstand (kWh)', data: s742 },
-        { name: 'Einspeisung Zählerstand (kWh)', data: s735 }
+        {name: 'Bezug Zählerstand (kWh)', data: s742},
+        {name: 'Einspeisung Zählerstand (kWh)', data: s735}
       ],
       xaxis: {
         ...this.opts.xaxis,

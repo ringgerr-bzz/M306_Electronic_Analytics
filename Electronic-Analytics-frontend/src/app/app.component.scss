@@ -1,9 +1,9 @@
 $app-gradient-start: #6a11cb;
-$app-gradient-end:   #2575fc;
-$app-bg:             #f2f2f7;
-$app-surface:        #ffffff;
-$app-text:           #1c1c1e;
-$app-shadow:         rgba(0, 0, 0, 0.1);
+$app-gradient-end: #2575fc;
+$app-bg: #f2f2f7;
+$app-surface: #ffffff;
+$app-text: #1c1c1e;
+$app-shadow: rgba(0, 0, 0, 0.1);
 
 :host {
   display: block;
@@ -28,10 +28,16 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
     font-size: 1.25rem;
     margin-left: 0.5rem;
   }
-  .spacer { flex: 1 1 auto; }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
-.sidenav-container { height: calc(100vh - 64px); }
+.sidenav-container {
+  height: calc(100vh - 64px);
+}
+
 .sidenav {
   width: 260px;
   background: $app-surface;
@@ -40,12 +46,20 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
   .logo-container {
     text-align: center;
     margin-bottom: 1rem;
-    img { width: 120px; height: auto; }
+
+    img {
+      width: 120px;
+      height: auto;
+    }
   }
+
   mat-list-item {
     margin: 0.25rem 0;
     border-radius: 8px;
-    &:hover { background: rgba($app-gradient-end, 0.1); }
+
+    &:hover {
+      background: rgba($app-gradient-end, 0.1);
+    }
   }
 }
 
@@ -57,9 +71,21 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
   border-radius: 0 0 16px 16px;
   margin-bottom: 2rem;
 
-  h1 { font-size: 2.5rem; margin-bottom: 1rem; font-weight: 300; }
-  p  { font-size: 1.125rem; margin-bottom: 2rem; }
-  button { font-size: 1rem; padding: 0.75rem 2rem; }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+
+  p {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+  }
 }
 
 .overview {
@@ -80,9 +106,18 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      mat-icon { font-size: 2rem; color: $app-gradient-end; }
-      mat-card-title { font-size: 1.125rem; font-weight: 500; }
+
+      mat-icon {
+        font-size: 2rem;
+        color: $app-gradient-end;
+      }
+
+      mat-card-title {
+        font-size: 1.125rem;
+        font-weight: 500;
+      }
     }
+
     &:hover {
       transform: translateY(-6px);
       box-shadow: 0 8px 20px $app-shadow;
@@ -100,6 +135,7 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 12px $app-shadow;
     padding: 1rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
     &:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 20px $app-shadow;
@@ -107,4 +143,6 @@ $app-shadow:         rgba(0, 0, 0, 0.1);
   }
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
