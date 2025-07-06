@@ -17,12 +17,28 @@ M306_Electronic_Analytics/
 ├── backend/        # Spring Boot Service
 ├── frontend/       # Angular Applikation
 ├── .gitignore
-└── README.md       # Diese Datei
+└── README.md       
 ```
+## IDE-Import
+
+1. Die beiden Projekte befinden sich in separaten Unterordnern. Öffne sie jeweils einzeln in deiner IDE:
+
+2. Backend öffnen:
+
+3. In IntelliJ: File → Open…
+
+4. Verzeichnis backend/ auswählen (enthält pom.xml)
+
+5. Frontend öffnen:
+
+6. In IntelliJ oder VSCode: File → Open…
+
+7. Verzeichnis frontend/ auswählen (enthält angular.json)
+
 
 ## Voraussetzungen
 
-* **Java 17+** und **Maven** (oder **Gradle**) für das Backend
+* **Java 17+** und **Maven**  für das Backend
 * **Node.js 16+**, **npm** und **Angular CLI** für das Frontend
 
 ## Schnellstart
